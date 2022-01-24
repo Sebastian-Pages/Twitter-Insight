@@ -1,0 +1,24 @@
+{
+  "name": "twitter-insight",
+  "version": "1.0.0",
+  "description": "A BigData project for university to monitor large amounts of tweets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sebastian-Pages/Twitter-Insight.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sebastian-Pages/Twitter-Insight/issues"
+  },
+  "homepage": "https://github.com/Sebastian-Pages/Twitter-Insight#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "hbase": "^0.6.1",
+    "nodemon": "^2.0.15"
+  }
+}
