@@ -6,7 +6,7 @@ const morgan = require("morgan");
 
 const PORT = 7000;
 const hostname = "127.0.0.1";
-const client = hbase({ host: "127.0.0.1", port: 8080 });
+const client = hbase({ host: "http://lsd-prod-namenode-0.lsd.novalocal", port: 8080 });
 
 const app = express();
 
