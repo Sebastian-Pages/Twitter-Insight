@@ -19,7 +19,7 @@ app.get('/t1', (req,res) => {
   client
       .table('ypages:t1')
       .row('0')
-      .get("loc:x", (err,cell) => 
+      .get("loc", (err,cell) => 
           err ? res.sendStatus(404) : res.json(cell)
       );
 });
