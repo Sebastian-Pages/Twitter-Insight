@@ -15,23 +15,11 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan("combined"));
 
-app.get("/t1", (req, res) => {
-  const rows = [];
-  scanner = client.table("node_table").scan({
-    startRow: "my_row",
-    maxVersions: 1,
-  });
-  scanner.on("readable", function () {
-    while ((chunk = scanner.read())) {
-      rows.push(chunk);
-    }
-  });
-  scanner.on("error", function (err) {
-    console.log(err);
-  });
-  scanner.on("end", function () {
-    console.log(rows);
-  });
+app.get('/t1', (req,res) => {
+  client
+      .get("", (err,cell) => 
+          err ? res.sendStatus(404) : res.json(cell)
+      );
 });
 
 app.get("/", (req, res) =>
