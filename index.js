@@ -18,6 +18,7 @@ app.use(morgan("combined"));
 app.get('/t1', (req,res) => {
   client
       .table('ypages:t1')
+      .row('*')
       .get("0", (err,cell) => 
           err ? res.sendStatus(404) : res.json(cell)
       );
