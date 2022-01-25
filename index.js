@@ -21,7 +21,7 @@ app.get('/t1', (req,res) => {
   client
       .table('t1')
       .row('0')
-      .get("total:value", (err,cell) => 
+      .get("loc:x", (err,cell) => 
           err ? res.sendStatus(404) : res.json(cell)
       );
 });
