@@ -18,13 +18,13 @@ app.use(morgan('combined'));
 
 
 app.get('/t1', (req,res) => {
-  client
-      .table('ypages:t1')
-      .row('0')
-      .get("loc:x", (err,cell) => 
-          err ? res.sendStatus(404) : res.json(cell)
-      );
-});
+  client.table('ypages:t1').scan({
+    startRow: 'my_row',
+    maxVersions: 1
+  }, function(err, rows){
+    console.log(err, rows);
+    return rows;
+  });
   
 
 app.get("/", (req, res) => res.status(400).send("Welcome To Twitter Insight 🐦"));
