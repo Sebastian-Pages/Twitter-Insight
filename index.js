@@ -24,6 +24,14 @@ app.get('/t1', (req,res) => {
       );
 });
 
+app.get("/api", (req, res) =>{
+  fetch('http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:t1/0')
+  .then(response => response.json())
+  .then(data => res.status(400).send("This is the Data: ",data));
+});
+
+
+
 app.get("/", (req, res) =>
   res.status(400).send("Welcome To Twitter Insight 🐦")
 );
