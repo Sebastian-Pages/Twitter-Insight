@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const https = require('https')
-
+const axios = require('axios');
 
 const PORT = 7000;
 const hostname = "127.0.0.1";
@@ -17,20 +17,27 @@ const app = express();
 
 app.use(morgan("combined"));
 
-app.get("/t1", (req1, res) => {
-  const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-  
-    res.on('data', d => {
-      res.status(400).send("data: ",d)
+app.get("/t1", (req, res) =>
+  res.status(400).send("Welcome To Twitter Insight 🐦:",getData())
+);
+
+function getData(){
+  axios.get('http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:t1/0')
+    .then(res => {
+      const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
+      console.log('Status Code:', res.status);
+      console.log('Date in Response header:', headerDate);
+
+      const users = res.data;
+      return users;
+      // for(user of users) {
+      //   console.log(`data: ${user}`);
+      // }
     })
-  })
-  req.on('error', error => {
-    console.error(error)
-  })
-  
-  req.end()
-});
+    .catch(err => {
+      console.log('Error: ', err.message);
+    });
+}
 
 app.get("/", (req, res) =>
   res.status(400).send("Welcome To Twitter Insight 🐦")
