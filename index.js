@@ -1,10 +1,12 @@
 const express = require("express");
 const morgan = require("morgan");
-const https = require('https')
-const axios = require('axios');
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const hbase = require("hbase");
 
 const PORT = 7000;
 const hostname = "127.0.0.1";
+const client = hbase({ host: "http://lsd-prod-namenode-0.lsd.novalocal", port: 8080 });
 const options = {
   hostname: 'http://lsd-prod-namenode-0.lsd.novalocal',
   port: 8080,
@@ -12,32 +14,41 @@ const options = {
   method: 'GET'
 }
 
-
 const app = express();
-
 app.use(morgan("combined"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors());
 
-app.get("/t1", (req, res) =>
-  res.status(400).send("Welcome To Twitter Insight 🐦:",getData())
-);
 
-function getData(){
-  axios.get('http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:t1/0')
-    .then(res => {
-      const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-      console.log('Status Code:', res.status);
-      console.log('Date in Response header:', headerDate);
+app.get('/t1', (req, res) => {
+  const scanner = client
+      .table('ypages:t1')
+      .scan({
+          startRow: '0',
+      })
 
-      const users = res.data;
-      return users;
-      // for(user of users) {
-      //   console.log(`data: ${user}`);
-      // }
-    })
-    .catch(err => {
-      console.log('Error: ', err.message);
-    });
-}
+  const rows = []
+
+  scanner.on('readable', () => {
+      let max = 0
+      let chunk
+
+      while ((chunk = scanner.read()) && max < req.params.batch) {
+          rows.push(chunk)
+          max++
+      }
+      scanner.emit('end', null);
+  })
+
+  scanner.on('error', err =>
+      res.sendStatus(404)
+  )
+
+  scanner.on('end', () =>
+      res.json(rows)
+  )
+});
 
 app.get("/", (req, res) =>
   res.status(400).send("Welcome To Twitter Insight 🐦")
