@@ -60,7 +60,7 @@
 
 const axios = require('axios');
 
-axios.get('http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:t1/0')
+axios.get('http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:t1/0', { withCredentials: true })
   .then(result => {
     console.log(result.data);
   })
