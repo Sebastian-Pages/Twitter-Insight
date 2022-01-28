@@ -19,15 +19,10 @@
   },
   "homepage": "https://github.com/Sebastian-Pages/Twitter-Insight#readme",
   "dependencies": {
-    "axios": "^0.25.0",
-    "body-parser": "^1.19.1",
-    "cors": "^2.8.5",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "express-promise-router": "^4.1.1",
-    "hbase": "^0.6.1",
     "morgan": "^1.10.0",
-    "node-fetch": "^3.2.0",
     "nodemon": "^2.0.15"
   }
 }
