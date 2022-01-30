@@ -55,11 +55,13 @@ public class SparkSequenceFileExample {
         //we need to do two things: first we need to copy data from each element of the rdd produced by sequenceFile because it reuses the same Writable objects when reading
         //second we need to change the types because spark does not like the Hadoop Writable classes, it does not know how to serialize them.
         //here I just took the String field inside TweetWritable. Alternatively we could write our own Serializable class.
-		JavaRDD<Tuple2<Long, String>> parsed = inputfile.map( 
-			(x) -> {
-				if (! x._2.hashtags.isEmpty()){
-					new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags[0]);}
-			}	
+		JavaRDD<Tuple2<Long, String>> parsed = inputfile
+		.filter(
+			x -> !x._2.isEmpty()
+		)
+		.map( 
+			x -> 
+				new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags[0])	
 		);
        	//print one tweet (just to test it)
         String a_tweet = parsed.take(5).get(0)._2;
