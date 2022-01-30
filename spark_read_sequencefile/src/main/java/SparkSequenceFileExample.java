@@ -58,9 +58,9 @@ public class SparkSequenceFileExample {
 		JavaRDD<Tuple2<Long, String>> parsed = inputfile.map( 
 			(x) -> {
 				if (! x._2.hashtags.isEmpty())
-					return new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags[0]);
+					new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags[0]);
 				else
-					return new Tuple2<Long, String> (new Long(x._1.get()), "");
+					new Tuple2<Long, String> (new Long(x._1.get()), "");
 			}	
 		);
        	//print one tweet (just to test it)
