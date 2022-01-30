@@ -1,3 +1,4 @@
 node_modules/
 views/pages/about.ejs
 Jobs/target/
+spark-read-sequencefile 2/

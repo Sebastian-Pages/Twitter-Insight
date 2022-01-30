@@ -58,6 +58,6 @@ public class SparkSequenceFileExample {
 		JavaRDD<Tuple2<Long, String>> parsed = inputfile.map(x -> new Tuple2<Long, String>(new Long(x._1.get()), x._2.text));
        	//print one tweet (just to test it)
         String a_tweet = parsed.take(1).get(0)._2;
-        System.out.println(a_tweet);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@: "+a_tweet+" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	}
 }
