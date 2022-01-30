@@ -59,6 +59,8 @@ public class SparkSequenceFileExample {
 			(x) -> {
 				if (! x._2.hashtags.isEmpty())
 					new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags[0]);
+				else
+					new Tuple2<Long, String> (new Long(x._1.get()), "");
 			}	
 		);
        	//print one tweet (just to test it)
