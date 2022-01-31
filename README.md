@@ -21,9 +21,13 @@ from /FilterTweetsJob
     mvn package
     yarn jar target/Projet-Tweeter-1.0.jar /user/auber/data_ple/tweets/tweet_01_03_2020.nljson filtered_tweets/
 
+    HADOOP_CLASSPATH=`hadoop classpath`:`hbase classpath` yarn jar target/Projet-Tweeter-1.0.jar /user/auber/data_ple/tweets/tweet_01_03_2020.nljson filtered_tweets/
+
 ### Jalon 2
 from /SparkSequenceFileExample
     mvn package 
     spark-submit --master yarn --num-executors 4 --executor-memory 512M --total-executor-cores 2 target/SparkSequenceFileExample-0.0.1.jar
 
 export HADOOP_CLASSPATH=`hadoop classpath`:`hbase mapredcp`:/etc/hbase/conf:/usr/hdp/3.0.0.0-1634/hbase/lib/*
+
+HADOOP_CLASSPATH=`hadoop classpath`:`hbase classpath` spark-submit [options] [fichier jar]
