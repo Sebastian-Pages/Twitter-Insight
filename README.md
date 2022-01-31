@@ -30,4 +30,9 @@ from /SparkSequenceFileExample
 
 export HADOOP_CLASSPATH=`hadoop classpath`:`hbase mapredcp`:/etc/hbase/conf:/usr/hdp/3.0.0.0-1634/hbase/lib/*
 
-HADOOP_CLASSPATH=`hadoop classpath`:`hbase classpath` spark-submit [options] [fichier jar]
+HADOOP_CLASSPATH=`hadoop classpath`:`hbase classpath` spark-submit [options] [fichier jar]export 
+
+### HBASE 
+HADOOP_CLASSPATH=`hadoop classpath`:`hbase mapredcp`:/etc/hbase/conf:/usr/hdp/3.0.0.0-1634/hbase/lib/*
+hbase shell
+list ?

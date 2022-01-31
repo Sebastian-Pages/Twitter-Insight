@@ -57,14 +57,16 @@ public class SparkSequenceFileExample {
         //here I just took the String field inside TweetWritable. Alternatively we could write our own Serializable class.
 		JavaRDD<Tuple2<Long, String>> parsed = inputfile
 		.filter(
-			x -> !x._2.hashtags.isEmpty()
+			x -> !(x._2.hashtags.length==0)
 		)
 		.map( 
 			x -> 
-				new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags[0])	
+			//x._2.hashtags.map( h-> new Tuple2<Long, String> (new Long(x._1.get()), h) )
+			//new Tuple2<Long, String> (new Long(x._1.get()), x._2.hashtags);	
+			new Tuple2<Long, String> (new Long(x._1.get()), x._2.text);	
 		);
        	//print one tweet (just to test it)
-        String a_tweet = parsed.take(5).get(0)._2;
+        String a_tweet = parsed.take(1).get(0)._2;
         System.out.println(a_tweet);
 	}
 }
