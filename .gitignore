@@ -1,4 +1,13 @@
 node_modules/
 views/pages/about.ejs
-Jobs/target/
+FilterTweetsJob/target/
 spark-read-sequencefile 2/
+FilterTweetsJob/target/classes/HashtagCounter.class
+FilterTweetsJob/target/classes/SparkSequenceFileExample.class
+FilterTweetsJob/target/classes/TweetMapper.class
+FilterTweetsJob/target/classes/TweetProject.class
+FilterTweetsJob/target/classes/TweetReducer.class
+FilterTweetsJob/target/classes/TweetWritable.class
+FilterTweetsJob/target/classes/Utils.class
+spark_read_sequencefile/target/classes/SparkSequenceFileExample.class
+spark_read_sequencefile/target/classes/TweetWritable.class
