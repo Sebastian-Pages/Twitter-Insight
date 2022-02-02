@@ -62,10 +62,10 @@ import java.nio.charset.Charset;
 import scala.Tuple2;
 
 
-public class SparkSequenceFileExample {
+public class CountUserTweets {
     public static final byte[] ID_FAMILY = Bytes.toBytes("name");
     public static final byte[] TEXT_FAMILY = Bytes.toBytes("count");
-    public static final String TABLE_NAME = "ypages:test3"; //IL FAUT CHANGER LE NAMESPACE!
+    public static final String TABLE_NAME = "aleflohic:test2"; //IL FAUT CHANGER LE NAMESPACE!
     //get a line of the input file and transform it into a pair (city, population)
 	/*public static Tuple2<String,String> parseString(String s) {
 			String [] parsed = s.split(",");
@@ -123,7 +123,7 @@ public class SparkSequenceFileExample {
 		SparkSession spark = new SparkSession(JavaSparkContext.toSparkContext(sc)); //if we want to work with dataframes
 
 	    //read the input sequence file into an RDD
-	    JavaPairRDD<LongWritable,TweetWritable> inputfile = sc.sequenceFile("/user/ypages/data/part*", LongWritable.class, TweetWritable.class); //here the types match what was used when writing the sequence file
+	    JavaPairRDD<LongWritable,TweetWritable> inputfile = sc.sequenceFile("/user/aleflohic/filtered_tweets/part*", LongWritable.class, TweetWritable.class); //here the types match what was used when writing the sequence file
         //we need to do two things: first we need to copy data from each element of the rdd produced by sequenceFile because it reuses the same Writable objects when reading
         //second we need to change the types because spark does not like the Hadoop Writable classes, it does not know how to serialize them.
         //here I just took the String field inside TweetWritable. Alternatively we could write our own Serializable class.
@@ -132,29 +132,29 @@ public class SparkSequenceFileExample {
         // JavaRDD<Tuple2<Long, String>> parsed = inputfile.map(x -> new Tuple2<Long, String>(new Long(x._1.get()), x._2.text));
         // JavaPairRDD<Long, String> inputmodified = JavaPairRDD.fromJavaRDD(parsed);
 
-		JavaRDD<Tuple2<String, Integer>> parsed = inputfile
-		    .filter(x -> !(x._2.hashtags.length==0))
-		    .flatMap(
-			     (x) ->  { 
-				 List<Tuple2<String,Integer>> res = new ArrayList<Tuple2<String,Integer>>();
-				 for (String h : x._2.hashtags) {
-				     res.add(new Tuple2<String,Integer>(h.split("\"")[3],1));
-				 }
-				 return res.iterator();
-			     } 
-		);
-		JavaRDD<String> parsedHash= parsed.map( x -> new String(x._1));
-		JavaPairRDD<String, Integer> hashOnes = parsedHash.mapToPair(s -> new Tuple2<>(s,1));
-		JavaPairRDD<String, Integer> hashCount = hashOnes.reduceByKey((i1, i2)-> i1 + i2);
-		List<Tuple2<String, Integer>> output = hashCount.collect();
+	    JavaRDD<Tuple2<Long, String>> parsed = inputfile.map(x -> new Tuple2<Long, String>(new Long(x._1.get()), x._2.userName));
+        /*JavaRDD<Tuple2<String, Integer>> parsed = inputfile
+            .flatMap(
+                 (x) ->  { 
+                 List<Tuple2<String,Integer>> res = new ArrayList<Tuple2<String,Integer>>();
+                 for (String h : x._2.userName) {
+                     res.add(new Tuple2<String,Integer>(h.split(""")[3],1));
+                 }
+                 return res.iterator();
+                 }
+		 );*/
+        JavaRDD<String> parsedUser= parsed.map( x -> new String(x._2));
+		JavaPairRDD<String, Integer> UserOnes = parsedUser.mapToPair(s -> new Tuple2<>(s,1)).filter(x -> !x._1.equals(""));
+		JavaPairRDD<String, Integer> UserCount = UserOnes.reduceByKey((i1, i2)-> i1 + i2);
+		List<Tuple2<String, Integer>> output = UserCount.collect();
 		
 		JavaPairRDD<String, Integer> hbaseoutputpre= sc.parallelizePairs(output,2);
 		JavaPairRDD<String, String> hbaseoutput= hbaseoutputpre.mapValues(f -> f.toString());
 
 	        
-		for (Tuple2<?,?> tuple : output){
+		/*for (Tuple2<?,?> tuple : output){
 		    System.out.println(tuple._1()+" : "+tuple._2());
-		}
+		    }*/
 
 		//create the hbase table where we'll write this
         createTable(connection);

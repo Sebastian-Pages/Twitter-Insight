@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <%- include('../partials/head'); %>
+  <script src="script.js" defer></script>
+  
 </head>
 <body class="container">
 
@@ -12,9 +14,17 @@
 <main>
   <div class="jumbotron">
     <h1>Hashtags</h1>
-    <p><%= tagline %></p>
-  </div>
+    <p>Found out how many time a hashtag has been used</p>
+    <p>add your hashtag in the URL</p>
+
+
+
+    <p>Answer</p>
+    <%= name %>
+    <%= count %>
+ 
 </main>
+
 
 <footer>
   <%- include('../partials/footer'); %>
