@@ -27,7 +27,7 @@ app.get('/hashtags/:hashtag', (req, res) => {
     parseString(stdout, function (err, result) {
       res.render('pages/hashtags',{ 
         name: result,
-        count: result
+        count: JSON.stringify(result)
       });
     });
     
