@@ -6,7 +6,7 @@ const hostname = "127.0.0.1";
 
 const app = express();
 app.use(morgan("combined"));
-//app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');
 
 app.get('/hashtags', (req, res) => {
   var exec = require('child_process').exec;
