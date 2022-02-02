@@ -65,7 +65,7 @@ app.get("/", (req, res) =>
 
 //API
 
-app.get("/api/hashtagcount/:name", (req, res) =>
+app.get('/api/hashtagcount/:name', (req, res) => {
   var exec = require('child_process').exec;
 
   var args = " -X GET -H Accept: application/json --negotiate -u: \\ http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:test3/"+req.params.name ;
@@ -79,7 +79,7 @@ app.get("/api/hashtagcount/:name", (req, res) =>
     }
   });
   
-);
+});
 
 
 app.listen(PORT, hostname, () =>
