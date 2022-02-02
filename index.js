@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+var parseString = require('xml2js').parseString;
 
 const PORT = 7005;
 const hostname = "127.0.0.1";
@@ -71,7 +72,10 @@ app.get('/api/hashtagcount/:name', (req, res) => {
   var args = " -X GET -H Accept: application/json --negotiate -u: \\ http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:test3/"+req.params.name ;
 
   exec('curl ' + args, function (error, stdout, stderr) {
-    res.json(stdout);
+    parseString(stdout, function (err, result) {
+      res.json(result);
+    });
+    
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
     if (error !== null) {
