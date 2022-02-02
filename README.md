@@ -28,7 +28,9 @@ from /SparkSequenceFileExample
     mvn package 
     spark-submit --master yarn --num-executors 4 --executor-memory 512M --total-executor-cores 2 target/SparkSequenceFileExample-0.0.1.jar
 
-export HADOOP_CLASSPATH=`hadoop classpath`:`hbase mapredcp`:/etc/hbase/conf:/usr/hdp/3.0.0.0-1634/hbase/lib/*
+    --deploy-mode cluster
+
+SparkSequenceFileExemple
 
 HADOOP_CLASSPATH=`hadoop classpath`:`hbase classpath` spark-submit [options] [fichier jar]export 
 
