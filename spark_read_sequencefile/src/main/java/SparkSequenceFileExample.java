@@ -59,13 +59,21 @@ public class SparkSequenceFileExample {
 		    .filter(x -> !(x._2.hashtags.length==0))
 		    //.map( x -> new Tuple2<Long, String> (new Long(x._1.get()), x._2.text))
 		    //.flatmap(x -> x._2);
-		
+			.flatMap(
+            (x) ->  { 
+                    List<Tuple2<String,Integer>> res = new ArrayList<Tuple2<String,Integer>>();
+                    for (String h : x._2.hashtags) {
+                        res.add(new Tuple2<String,Integer>(h,1));
+                    }
+                        return res.iterator();
+                } 
+        );
 
        	//print one tweet (just to test it)
-	String a_tweet = parsed.take(5).get(0);//._2;
-	long count = parsed.count();
+		String a_tweet = parsed.take(5).get(0);//._2;
+		long count = parsed.count();
   	
         System.out.println(""+a_tweet);
-	System.out.println("Count: "+count);
+		System.out.println("Count: "+count);
 	}
 }
