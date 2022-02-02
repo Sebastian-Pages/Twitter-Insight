@@ -26,7 +26,7 @@ app.get('/hashtags/:hashtag', (req, res) => {
   exec('curl ' + args, function (error, stdout, stderr) {
     parseString(stdout, function (err, result) {
       res.render('pages/hashtags',{ 
-        name: result,
+        name: result.CellSet,
         count: JSON.stringify(result)
       });
     });
