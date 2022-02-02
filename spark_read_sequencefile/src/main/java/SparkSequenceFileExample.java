@@ -55,25 +55,27 @@ public class SparkSequenceFileExample {
         //we need to do two things: first we need to copy data from each element of the rdd produced by sequenceFile because it reuses the same Writable objects when reading
         //second we need to change the types because spark does not like the Hadoop Writable classes, it does not know how to serialize them.
         //here I just took the String field inside TweetWritable. Alternatively we could write our own Serializable class.
-		JavaRDD<Tuple2<Long, String>> parsed = inputfile
+		JavaRDD<Tuple2<String, Integer>> parsed = inputfile
 		    .filter(x -> !(x._2.hashtags.length==0))
 		    //.map( x -> new Tuple2<Long, String> (new Long(x._1.get()), x._2.text))
 		    //.flatmap(x -> x._2);
-			.flatMap(
-            (x) ->  { 
-                    List<Tuple2<String,Integer>> res = new ArrayList<Tuple2<String,Integer>>();
-                    for (String h : x._2.hashtags) {
-                        res.add(new Tuple2<String,Integer>(h,1));
-                    }
-                        return res.iterator();
-                } 
-        );
+		    .flatMap(
+			     (x) ->  { 
+				 List<Tuple2<String,Integer>> res = new ArrayList<Tuple2<String,Integer>>();
+				 for (String h : x._2.hashtags) {
+				     res.add(new Tuple2<String,Integer>(h.split("\"")[3],1));
+				 }
+				 return res.iterator();
+			     } 
+		);
 
-       	//print one tweet (just to test it)
-		String a_tweet = parsed.take(5).get(0);//._2;
+		//print one tweet (just to test it)
+		String a_ht = parsed.take(5).get(0)._1;//._2;
+		int a_ht2 = parsed.take(5).get(0)._2;
 		long count = parsed.count();
   	
-        System.out.println(""+a_tweet);
-		System.out.println("Count: "+count);
+		System.out.println("1: "+a_ht);
+		System.out.println("2: "+a_ht2);
+		//System.out.println("Count: "+count);
 	}
 }
