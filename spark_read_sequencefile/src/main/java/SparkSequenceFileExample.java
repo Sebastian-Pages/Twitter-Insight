@@ -63,9 +63,9 @@ import scala.Tuple2;
 
 
 public class SparkSequenceFileExample {
-    public static final byte[] ID_FAMILY = Bytes.toBytes("id");
-    public static final byte[] TEXT_FAMILY = Bytes.toBytes("text");
-    public static final String TABLE_NAME = "ypages:test1"; //IL FAUT CHANGER LE NAMESPACE!
+    public static final byte[] ID_FAMILY = Bytes.toBytes("name");
+    public static final byte[] TEXT_FAMILY = Bytes.toBytes("count");
+    public static final String TABLE_NAME = "ypages:test3"; //IL FAUT CHANGER LE NAMESPACE!
     //get a line of the input file and transform it into a pair (city, population)
 	/*public static Tuple2<String,String> parseString(String s) {
 			String [] parsed = s.split(",");
@@ -94,7 +94,7 @@ public class SparkSequenceFileExample {
 
 	//get a tuple (city name, population) and prepare the corresponding tuple
     //that will become a row in the hbase table
-    public static Tuple2<ImmutableBytesWritable, Put> prepareForHbase(Tuple2<String,Integer> x) {
+    public static Tuple2<ImmutableBytesWritable, Put> prepareForHbase(Tuple2<String,String> x) {
         //the first element of the tuple, the city name, will be the key for the row
         //that could be a problem for cities with the same name.
         //However, this is just an example, we don't care.
@@ -147,13 +147,14 @@ public class SparkSequenceFileExample {
 		JavaPairRDD<String, Integer> hashOnes = parsedHash.mapToPair(s -> new Tuple2<>(s,1));
 		JavaPairRDD<String, Integer> hashCount = hashOnes.reduceByKey((i1, i2)-> i1 + i2);
 		List<Tuple2<String, Integer>> output = hashCount.collect();
-		JavaPairRDD<String, Integer> hbaseoutput= sc.parallelizePairs(output,2);
 		
+		JavaPairRDD<String, Integer> hbaseoutputpre= sc.parallelizePairs(output,2);
+		JavaPairRDD<String, String> hbaseoutput= hbaseoutputpre.mapValues(f -> f.toString());
 
-		//System.out.println("Count: "+count);
-		//for (Tuple2<?,?> tuple : output){
-		//    System.out.println(tuple._1()+" : "+tuple._2());
-		//}
+	        
+		for (Tuple2<?,?> tuple : output){
+		    System.out.println(tuple._1()+" : "+tuple._2());
+		}
 
 		//create the hbase table where we'll write this
         createTable(connection);
