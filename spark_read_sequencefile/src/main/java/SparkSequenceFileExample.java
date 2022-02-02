@@ -57,8 +57,6 @@ public class SparkSequenceFileExample {
         //here I just took the String field inside TweetWritable. Alternatively we could write our own Serializable class.
 		JavaRDD<Tuple2<String, Integer>> parsed = inputfile
 		    .filter(x -> !(x._2.hashtags.length==0))
-		    //.map( x -> new Tuple2<Long, String> (new Long(x._1.get()), x._2.text))
-		    //.flatmap(x -> x._2);
 		    .flatMap(
 			     (x) ->  { 
 				 List<Tuple2<String,Integer>> res = new ArrayList<Tuple2<String,Integer>>();
@@ -68,14 +66,16 @@ public class SparkSequenceFileExample {
 				 return res.iterator();
 			     } 
 		);
+		JavaRDD<String> parsedHash= parsed.map( x -> new String(x._1));
+		JavaPairRDD<String, Integer> hashOnes = parsedHash.mapToPair(s -> new Tuple2<>(s,1));
+		JavaPairRDD<String, Integer> hashCount = hashOnes.reduceByKey((i1, i2)-> i1 + i2);
+		List<Tuple2<String, Integer>> output = hashCount.collect();
+		JavaPairRDD<String, Integer> hbaseoutput= sc.parallelizePairs(output,2);
+		
 
-		//print one tweet (just to test it)
-		String a_ht = parsed.take(5).get(0)._1;//._2;
-		int a_ht2 = parsed.take(5).get(0)._2;
-		long count = parsed.count();
-  	
-		System.out.println("1: "+a_ht);
-		System.out.println("2: "+a_ht2);
 		//System.out.println("Count: "+count);
+		for (Tuple2<?,?> tuple : output){
+		    System.out.println(tuple._1()+" : "+tuple._2());
+		}
 	}
 }
