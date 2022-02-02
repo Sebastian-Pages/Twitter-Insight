@@ -69,7 +69,7 @@ app.get("/", (req, res) =>
 app.get('/api/hashtagcount/:name', (req, res) => {
   var exec = require('child_process').exec;
 
-  var args = " -X GET -H Accept: application/json --negotiate -u: \\ http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:test3/"+req.params.name ;
+  var args = " -X GET -H Accept: application/json --negotiate -u: \ http://lsd-prod-namenode-0.lsd.novalocal:8080/ypages:test3/"+req.params.name ;
 
   exec('curl ' + args, function (error, stdout, stderr) {
     parseString(stdout, function (err, result) {
